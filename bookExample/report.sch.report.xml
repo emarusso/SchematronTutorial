@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<svrl:schematron-output xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                        xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                        xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+                        xmlns:saxon="http://saxon.sf.net/"
+                        xmlns:schold="http://www.ascc.net/xml/schematron"
+                        xmlns:iso="http://purl.oclc.org/dsdl/schematron"
+                        xmlns:xhtml="http://www.w3.org/1999/xhtml"
+                        xmlns:dp="http://www.dpawson.co.uk/ns#"
+                        title="Test ISO schematron file. Introduction mode"
+                        schemaVersion="ISO19757-3"><!--   
+		   
+		   
+		 -->
+   <svrl:ns-prefix-in-attribute-values uri="http://www.dpawson.co.uk/ns#" prefix="dp"/>
+   <svrl:active-pattern document="file:/C:/Users/Emanuele/Documents/SchematronIso/input.xml"/>
+   <svrl:fired-rule context="chapter"/>
+   <svrl:successful-report test="count(para)" location="/doc[1]/chapter[1]">
+      <svrl:text>1 paragraphs
+			</svrl:text>
+   </svrl:successful-report>
+   <svrl:fired-rule context="chapter"/>
+   <svrl:successful-report test="count(para)" location="/doc[1]/chapter[2]">
+      <svrl:text>3 paragraphs
+			</svrl:text>
+   </svrl:successful-report>
+   <svrl:fired-rule context="chapter"/>
+   <svrl:successful-report test="count(para)" location="/doc[1]/chapter[3]">
+      <svrl:text>1 paragraphs
+			</svrl:text>
+   </svrl:successful-report>
+</svrl:schematron-output>

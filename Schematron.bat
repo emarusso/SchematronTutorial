@@ -1,27 +1,43 @@
 @echo off
-REM Very basic schematron rules to validate an html according to accessibility principles
-REM Example coming from http://xml.ascc.net/schematron/1.5/report1-5/schematron-report.html
+cls
 
-set schematron_rules=exampleWai\wai.xml
-set file_to_validate=exampleWai\waitest.xml
+REM Usage: build %%1 = iso schematron file 
+REM  %%2 is the input xml file, with the extension.
+REM E.g. build input input.xml will produce input.report.xml as output
 
-set Parse=msxsl.exe
-set Open=start 
+set XsltProcessor=C:\Users\Emanuele\Documents\SchematronIso\SaxonHE9-6-0-7J\saxon9he.jar
+REM set schema_compiler=iso-schematron-xslt2\iso_svrl_for_xslt2.xsl
+set schema_compiler=C:\Users\Emanuele\Documents\SchematronIso\iso-schematron-xslt2\iso_schematron_text.xsl
 
-set validation_report=schematron-frame.html
-set schematron_processor=schematron-report.xsl
-set schematron_validator=temp.xsl
-set validation_result=schematron-errors.html
-set file_to_validate_in_html=schematron-out.html
-set embed_xml_in_html=verbid.xsl
-set and_generate=-o
+IF [%1]==[] GOTO printusage
 
-del %validation_result%
-del %file_to_validate_in_html%
+set schemaFile=%1
+set fileToValidate=%2
+set compile_output="compile_output.xsl"
 
-%Parse% %schematron_rules% %schematron_processor% %and_generate% %schematron_validator%
-%Parse% %file_to_validate% %schematron_validator% %and_generate% %validation_result%
-%Parse% %file_to_validate% %embed_xml_in_html% %and_generate% %file_to_validate_in_html%
-%Open% %validation_report%
+echo Processing...
+echo.
 
-del %schematron_validator%
+REM Generate the stylesheet from %schemaFile%
+
+java -jar %XsltProcessor% -o:%compile_output% %schemaFile% %schema_compiler%
+
+REM Now run the input file %fileToValidate% against the generated stylesheet %compile_output% to produce %schemaFile%%.report.xml
+
+java -jar %XsltProcessor% -o:%schemaFile%.report.xml %fileToValidate% %compile_output%
+
+del %compile_output%
+
+echo.
+echo Validation of %2 with %1 produced the following issues:
+echo.
+type %schemaFile%.report.xml
+
+GOTO end
+
+:printusage
+echo Schematron example requires 2 params: %%1 = iso schematron file, %%2 =  xml to validate.
+echo E.g. %0 input input.xml will produce input.report.xml as output
+
+:end
+
